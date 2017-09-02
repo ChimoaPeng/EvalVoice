@@ -1,12 +1,17 @@
 package com.kingsun.evalvoice;
 
 import android.content.Context;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kingsun.evalvoice.entity.EvaluateResult;
 import com.kingsun.evalvoice.entity.LineResult;
+import com.kingsun.evalvoice.entity.WordResult;
 import com.unisound.edu.oraleval.sdk.sep15.IOralEvalSDK;
 import com.unisound.edu.oraleval.sdk.sep15.IOralEvalSDK.EndReason;
 import com.unisound.edu.oraleval.sdk.sep15.IOralEvalSDK.ICallback;
@@ -196,5 +201,60 @@ public class DubRecordManager implements ICallback {
                     break;
             }
         }
+    }
+
+    /**
+     * @Title: setViewTextColor @Description:
+     * (设置跟读评测结果单词对应颜色显示) @param @param textView @param @param wordResults
+     * 设定文件 @return void 返回类型 @throws
+     * <p>
+     * 4个级别的不同的颜色值
+     * // 正黑，perfect
+     * int color1 = textView.getContext().getResources().getColor(R.color.black);
+     * // excellent
+     * int color2 = textView.getContext().getResources().getColor(R.color.text_color_wonderful);
+     * // great
+     * int color3 = textView.getContext().getResources().getColor(R.color.text_color_great);
+     * // good
+     * int color4 = textView.getContext().getResources().getColor(R.color.text_color_good);
+     */
+    public static void setViewTextColor(TextView textView, List<WordResult> wordResults, int color1, int color2, int color3, int color4) {
+        if (wordResults == null) {
+            return;
+        }
+        String text = textView.getText().toString().trim();
+        SpannableString sp = new SpannableString(textView.getText().toString().trim());
+        for (int i = 0; i < wordResults.size(); i++) {
+            if (!wordResults.get(i).getText().equals("sil")) {
+                // 不等于分隔符
+                int start = text.indexOf(wordResults.get(i).getText());
+                if (start == -1)
+                    continue;
+                int end = start + wordResults.get(i).getText().length();
+                String replaceMent = createLengthString(end - start);
+                text = text.replaceFirst(wordResults.get(i).getText(), replaceMent);
+
+                if (wordResults.get(i).getScore() >= 9d) {
+                    sp.setSpan(new ForegroundColorSpan(color1), start, end, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                }
+                if (wordResults.get(i).getScore() >= 8d) {
+                    sp.setSpan(new ForegroundColorSpan(color2), start, end, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                }
+                if (wordResults.get(i).getScore() >= 6d) {
+                    sp.setSpan(new ForegroundColorSpan(color3), start, end, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                } else {
+                    sp.setSpan(new ForegroundColorSpan(color4), start, end, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                }
+            }
+        }
+        textView.setText(sp);
+    }
+
+    public static String createLengthString(int length) {
+        String str = "";
+        for (int i = 0; i < length; i++) {
+            str += "#";
+        }
+        return str;
     }
 }
