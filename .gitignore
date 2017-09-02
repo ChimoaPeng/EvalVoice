@@ -4,4 +4,4 @@ build
 EvalVoice.iml
 local.properties
 EvalVoice/build
-EvalVoice/EvalVoice-EvalVoice.iml
+EvalVoice/*.iml
