@@ -1,6 +1,8 @@
 ### How to use
 ---
-compile 'com.github.ChimoaPeng:EvalVoice:1.0.2'
+dependencies {
+    compile 'com.github.ChimoaPeng:EvalVoice:1.0.2'
+}
 
 <pre>
 First
