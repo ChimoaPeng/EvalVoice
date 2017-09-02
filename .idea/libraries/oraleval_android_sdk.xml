@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="oraleval-android-sdk">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/EvalVoice/libs/oraleval-android-sdk.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
