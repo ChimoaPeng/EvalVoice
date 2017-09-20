@@ -24,6 +24,10 @@ public class VoiceEvaluate {
         initialize();
     }
 
+    public void set_scoreAdjuest(float _scoreAdjuest) {
+        this._scoreAdjuest = _scoreAdjuest;
+    }
+
     private void initialize() {
         if (USE_OFFLINE_SDK_IF_FAIL_TO_SERVER) {
             Log.i(TAG, "start init offline sdk");

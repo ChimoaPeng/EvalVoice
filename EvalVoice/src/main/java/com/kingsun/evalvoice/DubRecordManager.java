@@ -53,6 +53,13 @@ public class DubRecordManager implements ICallback {
 
     }
 
+    /**
+     * 0.6-1.9,1.9最容易
+     */
+    public void setScoreAdjuest(float value) {
+        evaluate.set_scoreAdjuest(value);
+    }
+
     public synchronized void recording(final String dialogueText, Object params, String recordPath) {
         recording(dialogueText, params, recordPath, false);
     }
