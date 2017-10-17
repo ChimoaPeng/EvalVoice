@@ -1,5 +1,6 @@
 package com.kingsun.evalvoice;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -189,23 +190,30 @@ public class DubRecordManager implements ICallback {
 
     }
 
-    public static void onlineSDKError(Context context, SDKError error) {
+    public static void onlineSDKError(final Context context, final SDKError error) {
         if (error != null && error.errno != -99) {
-            switch (SDKError.Category.valueOf(error.category.toString())) {
-                case Device:
-                    Toast.makeText(context, "录音设备错误,确认开启录音权限", Toast.LENGTH_SHORT).show();
-                    break;
-                case Network:
-                    Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
-                    break;
-                case Server:
-                    Toast.makeText(context, "服务器错误。 遇到此错误联系云知声", Toast.LENGTH_SHORT).show();
-                    break;
-                case Unknown_word:
-                    Toast.makeText(context, "非法评测内容", Toast.LENGTH_SHORT).show();
-                    break;
-                default:
-                    break;
+            if (context instanceof Activity) {
+                ((Activity) context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        switch (SDKError.Category.valueOf(error.category.toString())) {
+                            case Device:
+                                Toast.makeText(context, "录音设备错误,确认开启录音权限", Toast.LENGTH_SHORT).show();
+                                break;
+                            case Network:
+                                Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
+                                break;
+                            case Server:
+                                Toast.makeText(context, "服务器错误。 遇到此错误联系云知声", Toast.LENGTH_SHORT).show();
+                                break;
+                            case Unknown_word:
+                                Toast.makeText(context, "非法评测内容", Toast.LENGTH_SHORT).show();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
             }
         }
     }
